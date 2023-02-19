@@ -1,21 +1,33 @@
 <template>
   <!-- 顶部通栏 -->
-  <nav></nav>
+  <AppNavbar />
   <!-- 头部组件 -->
-  <header></header>
+  <AppHeader />
   <!-- 内容容器 -->
-  <div class="main">
+  <div class="app-bady">
     <!-- 二级路由 -->
     <RouterView />
   </div>
   <!-- 底部组件 -->
-  <footer></footer>
+  <AppFooter />
 </template>
 
 <script>
+import AppNavbar from '@/components/app-navbar'
+import AppHeader from '@/components/app-header'
+import AppFooter from '@/components/app-footer'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Layout'
+  name: 'Layout',
+  components: {
+    AppNavbar,
+    AppHeader,
+    AppFooter
+  }
 }
 </script>
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.app-bady {
+  min-height: 600px;
+}
+</style>

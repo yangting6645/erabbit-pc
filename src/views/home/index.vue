@@ -10,5 +10,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang=" less" >
+/* @import '../../assets/style/mixins.less';
+.container {
+  .hoverShadow();
+} */
 </style>
