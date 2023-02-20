@@ -1,15 +1,14 @@
 <template>
   <ul class="app-header-nav">
-    <!-- {{$store.state.category.list}} -->
     <li class="home"><RouterLink to="/">首页</RouterLink></li>
-    <li v-for="item in list" :key="item.id" @mouseenter="show(item)" @mouseleave="hide(item)">
-      <RouterLink @click="hide(item)" to="/category/${item.id}">{{item.name}}</RouterLink>
+    <li v-for="item in list" :key="item.id" @mousemove="show(item)" @mouseleave="hide(item)">
+      <RouterLink @click="hide(item)" :to="`/category/${item.id}`">{{item.name}}</RouterLink>
       <div class="layer" :class="{open:item.open}">
         <ul>
           <li v-for="sub in item.children" :key="sub.id">
-            <RouterLink @click="hide(item)" to="/category/sub/${sub.id}">
-              <img src="sub.picture" alt="">
-              <p><sub class="name"></sub></p>
+            <RouterLink  @click="hide(item)" :to="`/category/sub/${sub.id}`">
+              <img :src="sub.picture" alt="">
+              <p>{{sub.name}}</p>
             </RouterLink>
           </li>
         </ul>
@@ -17,7 +16,6 @@
     </li>
   </ul>
 </template>
-
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
@@ -30,34 +28,33 @@ export default {
       return store.state.category.list
     })
 
-    // 跳转的时候不会关闭二级类目 通过数据来控制
-    // 1.每个分类加上open数据
-    // 2.提供显示和隐藏函数，修改open数据
-    // 3.再组件中使用vuex中的函数，使用时间来绑定，提供应该类名显示隐藏
+    // 跳转的时候不会关闭二级类目，通过数据来控制
+    // 1. vuex每个分类加上open数据
+    // 2. vuex提供显示和隐藏函数，修改open数据
+    // 3. 组件中使用vuex中的函数，使用时间来绑定，提供一个类名显示隐藏的类名
     const show = (item) => {
-      store.commit('category/show', item)
+      store.commit('category/show', item.id)
     }
     const hide = (item) => {
-      store.commit('category/hide', item)
+      store.commit('category/hide', item.id)
     }
     return { list, show, hide }
   }
 }
 </script>
-
-<style scoped lang='less'>
+<style scoped lang="less">
 .app-header-nav {
   width: 820px;
   display: flex;
   justify-content: space-around;
   padding-left: 40px;
   position: relative;
-  z-index: 998;
+  z-index: 999;
   > li {
     margin-right: 40px;
     width: 38px;
     text-align: center;
-  > a {
+    > a {
       font-size: 16px;
       line-height: 32px;
       height: 32px;
@@ -68,7 +65,7 @@ export default {
         color: @xtxColor;
         border-bottom: 1px solid @xtxColor;
       }
-      // 显示二级类名
+      // 显示二级类目
       // > .layer {
       //   height: 132px;
       //   opacity: 1;
@@ -76,7 +73,7 @@ export default {
     }
   }
 }
-// 二级类名弹窗
+// 二级类名弹层
 .layer {
   &.open {
     height: 132px;
