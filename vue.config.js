@@ -6,7 +6,8 @@ module.exports = {
       patterns: [
         path.join(__dirname, './src/assets/style/variables.less'),
         path.join(__dirname, './src/assets/style/mixins.less')
-      ]
+      ],
+      lintOnSave:false
     }
   }
 }

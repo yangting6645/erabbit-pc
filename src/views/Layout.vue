@@ -32,7 +32,7 @@ export default {
   // 获取分类组件
   setup () {
     const store = useStore()
-    store.dispatch('category/gitList')
+    store.dispatch('category/getList')
   }
 }
 </script>
