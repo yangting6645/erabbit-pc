@@ -14,7 +14,15 @@
           <GoodsImage :images="goods.mainPictures" />
           <GoodsSales />
         </div>
-        <div class="spec"></div>
+        <div class="spec">
+          <GoodsName :goods="goods" />
+          <!-- sku组件 -->
+          <GoodsSku :goods="goods" @change="changeSku"/>
+          <!-- 数量选择组件 -->
+          <XtxNumbox label="数量" v-model="num" :max="goods.inventory"/>
+          <!-- 按钮组件 -->
+          <XtxButton type="primary" style="margin-top:20px">加入购物车</XtxButton>
+        </div>
       </div>
       <!-- 商品推荐 -->
       <GoodsRelevant />
@@ -22,12 +30,15 @@
       <div class="goods-footer">
         <div class="goods-article">
           <!-- 商品+评价 -->
-          <div class="goods-tabs"></div>
+          <GoodsTabs />
           <!-- 注意事项 -->
-          <div class="goods-warn"></div>
+          <GoodsWarn />
         </div>
         <!-- 24热榜+专题推荐 -->
-        <div class="goods-aside"></div>
+        <div class="goods-aside">
+          <GoodsHot />
+          <GoodsHot :type="2"/>
+        </div>
       </div>
     </div>
   </div>
@@ -36,16 +47,35 @@
 <script>
 import GoodsRelevant from './components/goods-relevant'
 import GoodsImage from './components/goods-image'
-import { ref, watch, nextTick} from 'vue'
+import GoodsSales from './components/goods-sales'
+import GoodsName from './components/goods-name'
+import GoodsSku from './components/goods-sku'
+import GoodsTabs from './components/goods-tabs'
+import GoodsHot from './components/goods-hot'
+import GoodsWarn from './components/goods-warn'
+import { ref, watch, nextTick, provide} from 'vue'
 import { findGoods } from '@/api/product'
 import { useRoute } from 'vue-router'
+import XtxButton from '@/components/library/xtx-button.vue'
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant, GoodsImage },
+  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku,XtxButton, GoodsTabs, GoodsHot, GoodsWarn },
   setup () {
     // 1、获取商品详情，进行渲染
     const goods = useGoods()
-    return { goods }
+    const changeSku = (sku) => {
+      // 修改商品的现价原价库存信息
+      if (sku.skuId) {
+        goods.value.price = sku.price
+        goods.value.oldPrice = sku.oldPrice
+        goods.value.inventory = sku.inventory
+      }
+    }
+    // 提供goods数据给后代组件使用
+    provide('goods', goods)
+    // 选择的数量
+    const num = ref(1)
+    return { goods, changeSku, num }
   }
 }
 // 获取商品详情
@@ -95,10 +125,10 @@ const useGoods = () => {
     min-height: 1000px;
   }
 }
-.goods-tabs {
-  min-height: 600px;
-  background: #fff;
-}
+// .goods-tabs {
+//   min-height: 600px;
+//   background: #fff;
+// }
 .goods-warn {
   min-height: 600px;
   background: #fff;
