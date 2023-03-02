@@ -14,7 +14,8 @@ import defaultImg from '@/assets/images/200.png'
 // - 它又一个属性 `keys() `  获取所有的文件路径
 // 通过文件路径数组，通过遍历数组，再使用 `importFn`  根据路径导入组件对象
 // 遍历的同时进行全局注册即可
-// import Message from './Message'
+
+import Message from './Message'
 // import Confirm from './Confirm'
 
 const importFn = require.context('./',false,/\.vue$/)
@@ -41,7 +42,7 @@ export default {
     defineDirective(app)
 
     // 定义一个原型函数
-    // app.config.globalProperties.$message = Message
+    app.config.globalProperties.$message = Message
     // app.config.globalProperties.$confirm = Confirm
   }
 }                                   
