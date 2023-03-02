@@ -17,10 +17,10 @@
       </a>
     </nav>
     <div class="tab-content" v-if="hasAccount">
-      <CallbackBind :nickname="nickname" :avatar="avatar" />
+      <CallbackBind :unionId="unionId" />
     </div>
     <div class="tab-content" v-else>
-      <CallbackPatch />
+      <CallbackPatch :unionId="unionId" />
     </div>
   </section>
   <LoginFooter />
@@ -49,6 +49,7 @@ export default {
     const isBind = ref(true)
     const store = useStore()
     const router = useRouter()
+    const unionId = ref(null)
 
     // 确保QQ已经登录
     if (QC.Login.check()) {
@@ -56,6 +57,7 @@ export default {
       QC.Login.getMe((openId) => {
         // 请求小兔鲜后台,做QQ登录
         userQQLogin(openId).then(data => {
+          unionId.value = openId
           // 登录成功: data.result用户信息
           // 1.存储用户信息
           const { id, account, avatar, mobile, nickname, token } = data.result
@@ -73,7 +75,7 @@ export default {
       })
     }
 
-    return { hasAccount,isBind }
+    return { hasAccount,isBind, unionId }
   }
 }
 </script>
